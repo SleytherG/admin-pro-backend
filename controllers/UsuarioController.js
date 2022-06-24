@@ -4,13 +4,31 @@ const bcrypt = require('bcryptjs');
 const { generarJWT } = require('../helpers/jwt');
 
 const getUsuarios = async (req, res) => {
-  const usuarios = await Usuario.find({}, "nombre email role google");
+
+  const desde = Number(req.query.desde) || 0;
+  const size = Number(req.query.size) || 5;
+
+//   const usuarios = await Usuario
+//                                 .find({}, "nombre email role google")
+//                                 .skip( desde )
+//                                 .limit( size );
+
+//   const total = await Usuario.count();
+const [ usuarios, total ] = await Promise.all([
+    Usuario
+          .find({}, "nombre email role google img")
+          .skip( desde )
+          .limit( size ),
+    Usuario.countDocuments()
+]);
+
 
   res.json({
     ok: true,
     msg: "Lista de Usuarios",
     usuarios: usuarios,
-    uid: req.uid
+    uid: req.uid,
+    total: total
   });
 };
 
