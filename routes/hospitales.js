@@ -27,7 +27,9 @@ const { crearHospital, getHospitales, actualizarHospital, eliminarHospital } = r
  // Actualizar Hospitales
  router.put('/:id',
      [
-        validarJWT
+        validarJWT,
+        check('nombre', 'El nombre del Hospital es necesario.').not().isEmpty(),
+        validarCampos
      ], 
      actualizarHospital 
  );

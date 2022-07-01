@@ -28,12 +28,16 @@ const { getMedicos, crearMedico, actualizarMedico, eliminarMedico } = require('.
  // Actualizar Medicos
  router.put('/:id',
      [
+        validarJWT,
+        check('nombre', 'El nombre del medico es obligatorio').not().isEmpty(),
+        check('hospital', 'El hospital id debe de ser valido').isMongoId(),
+        validarCampos
      ], 
      actualizarMedico 
  );
  
  // Eliminar Medicos
- router.delete('/:id', eliminarMedico );
+ router.delete('/:id', validarJWT, eliminarMedico );
  
  
  
